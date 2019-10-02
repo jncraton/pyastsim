@@ -63,18 +63,18 @@ def get_pair_stats(pair):
 
 if __name__ == '__main__':
     ap = argparse.ArgumentParser(description='Check python source files for similarity')
-    ap.add_argument('--func', help="Specific function to compare")
+    ap.add_argument('--threshold', default=80, type=int, help="Similarity threshold. Values below this are not reported.")
+    ap.add_argument('--function', help="Specific function to compare")
     ap.add_argument('files', nargs='+', help="List of files to compare")
 
     args = ap.parse_args()
 
-    print(args.func)
-
-    submissions = [get_normed_content(f, args.func) for f in args.files]
+    submissions = [get_normed_content(f, args.function) for f in args.files]
 
     pairs = [get_pair_stats(pair) for pair in itertools.combinations(submissions, 2)]
 
     pairs.sort(key=lambda a: -a[0])
 
-    for percent, dld, a, b in pairs:
-        print(f"Detected pair similarity of {int(percent)}% with edit distance of {dld} for {a} and {b}")
+    for sim, dld, a, b in pairs:
+        if sim > args.threshold:
+            print(f"Detected pair similarity of {int(sim)}% with edit distance of {dld} for {a} and {b}")
