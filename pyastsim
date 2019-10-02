@@ -4,6 +4,7 @@ import itertools
 import sys
 import re
 import argparse
+import difflib
 
 from ast import parse, NodeTransformer, copy_location, Name, FunctionDef, Expr, Str
 import astunparse
@@ -59,7 +60,7 @@ def get_pair_stats(pair):
     dld = editdistance.eval(pair[0][1], pair[1][1])
     avg_len = ( len(pair[0][1]) + len(pair[1][1]) ) / 2.0
     percent = 100.0 * (1 - (dld / avg_len))
-    return((percent, dld, pair[0][0], pair[1][0]))
+    return((percent, dld, pair[0], pair[1]))
 
 if __name__ == '__main__':
     ap = argparse.ArgumentParser(description='Check python source files for similarity')
@@ -77,4 +78,6 @@ if __name__ == '__main__':
 
     for sim, dld, a, b in pairs:
         if sim > args.threshold:
-            print(f"Detected pair similarity of {int(sim)}% with edit distance of {dld} for {a} and {b}")
+            print(f"Detected pair similarity of {int(sim)}% with edit distance of {dld} for {a[0]} and {b[0]}\n")
+
+            print('\n'.join(difflib.ndiff(a[1].splitlines(), b[1].splitlines())))
