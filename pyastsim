@@ -1,0 +1,80 @@
+#!/usr/bin/env python3
+
+import itertools
+import sys
+import re
+import argparse
+
+from ast import parse, NodeTransformer, copy_location, Name, FunctionDef, Expr, Str
+import astunparse
+import editdistance
+
+class NormIdentifiers(NodeTransformer):
+    def __init__(self):
+        self.identifiers = {}
+        super().__init__()
+
+    def visit_Name(self, node):
+        try:
+            id = self.identifiers[node.id]
+        except KeyError:
+            id = f'identifier{len(self.identifiers)}'
+            self.identifiers[node.id] = id
+        
+        return  copy_location(Name(id=id), node)
+
+class NormFunctions(NodeTransformer):
+    def __init__(self, func=None):
+        self.identifiers = {}
+        self.func = func
+        super().__init__()
+
+    def visit_FunctionDef(self, node):
+        if self.func and self.func != node.name:
+            return None
+    
+        try:
+            name = self.identifiers[node.name]
+        except KeyError:
+            name = f'function{len(self.identifiers)}'
+            self.identifiers[node.name] = name
+
+        new_func = FunctionDef(name=name, args=node.args, body=node.body, decorator_list=node.decorator_list)
+
+        if isinstance(new_func.body[0], Expr) and isinstance(new_func.body[0].value, Str):
+            del new_func.body[0]
+        
+        return  copy_location(new_func, node)
+
+def get_normed_content(filename, func=None):
+    with open(filename) as src:
+        tree = parse(src.read())
+    
+        tree = NormIdentifiers().visit(tree)
+        tree = NormFunctions(func=func).visit(tree)
+    
+        return (filename, astunparse.unparse(tree))
+
+def get_pair_stats(pair):
+    dld = editdistance.eval(pair[0][1], pair[1][1])
+    avg_len = ( len(pair[0][1]) + len(pair[1][1]) ) / 2.0
+    percent = 100.0 * (1 - (dld / avg_len))
+    return((percent, dld, pair[0][0], pair[1][0]))
+
+if __name__ == '__main__':
+    ap = argparse.ArgumentParser(description='Check python source files for similarity')
+    ap.add_argument('--func', help="Specific function to compare")
+    ap.add_argument('files', nargs='+', help="List of files to compare")
+
+    args = ap.parse_args()
+
+    print(args.func)
+
+    submissions = [get_normed_content(f, args.func) for f in args.files]
+
+    pairs = [get_pair_stats(pair) for pair in itertools.combinations(submissions, 2)]
+
+    pairs.sort(key=lambda a: -a[0])
+
+    for percent, dld, a, b in pairs:
+        print(f"Detected pair similarity of {int(percent)}% with edit distance of {dld} for {a} and {b}")
