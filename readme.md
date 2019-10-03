@@ -1,6 +1,8 @@
 pyastsim
 ========
 
+[![Build Status](https://travis-ci.org/jncraton/pyastsim.svg?branch=master)](https://travis-ci.org/jncraton/pyastsim)
+
 Calculates the similarity between a batch of Python files.
 
 Usage
