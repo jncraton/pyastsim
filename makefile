@@ -1,5 +1,7 @@
 all: dotest
 
+script=pyastsim/pyastsim
+
 dotest:
-	./pyastsim test/copied/*.py || echo "Test 1 Passed"
-	./pyastsim --threshold 100 test/copied/*.py && echo "Test 2 Passed"
+	$(script) test/copied/*.py || echo "Test 1 Passed"
+	$(script) --threshold 100 test/copied/*.py && echo "Test 2 Passed"
