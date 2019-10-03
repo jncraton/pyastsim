@@ -12,5 +12,6 @@ upload:
 
 clean:
 	rm -rf pyastsim.egg-info
+	rm -rf pyastsim/__pycache__
 	rm -rf dist
 	rm -rf build
