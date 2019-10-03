@@ -5,7 +5,7 @@ with open("readme.md", "r") as fh:
 
 setuptools.setup(
     name="pyastsim",
-    version="1.0.3",
+    version="1.0.5",
     author="Jon Craton",
     author_email="jon@joncraton.com",
     description="Detect similarities between Python source files",
@@ -24,4 +24,8 @@ setuptools.setup(
             'pyastsim=pyastsim:main',
         ],
     },
+    install_requires=[
+        'astunparse',
+        'editdistance',
+    ],
 )
