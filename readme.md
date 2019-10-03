@@ -3,6 +3,55 @@ pyastsim
 
 Calculates the similarity between a batch of Python files.
 
+Usage
+-----
+
+```
+usage: pyastsim [-h] [--threshold THRESHOLD] [--show-diff]
+                [--function FUNCTION]
+                files [files ...]
+
+Check Python source files for similarity
+
+positional arguments:
+  files                 List of files to compare
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --threshold THRESHOLD
+                        Similarity threshold. Values below this are not
+                        reported.
+  --show-diff           Show entire diff when reporting results.
+  --function FUNCTION   Specific function to compare
+```
+
+Examples
+--------
+
+Show check for similarity of a group of files using default settings:
+
+```
+pyastsim *.py
+```
+
+Set a custom threshold to be more or less sensative (default threshold is 80% similarity):
+
+```
+pyastsim --threshold 90 *.py
+```
+
+Show full diffs when reporting similar files:
+
+```
+pyastsim --show-diff *.py
+```
+
+Remove all but one function from the AST before performing comparison:
+
+```
+pyastsim --function my_func *.py
+```
+
 Difference Calculation
 ----------------------
 
