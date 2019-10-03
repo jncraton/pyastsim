@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 import itertools
 import sys
 import re
@@ -65,7 +63,7 @@ def get_pair_stats(pair):
     percent = 100.0 * (1 - (dld / avg_len))
     return((percent, dld, pair[0], pair[1]))
 
-if __name__ == '__main__':
+def main():
     ap = argparse.ArgumentParser(description='Check Python source files for similarity')
     ap.add_argument('--threshold', default=80, type=int, help="Similarity threshold. Values below this are not reported.")
     ap.add_argument('--show-diff', dest='show_diff', action='store_true', help="Show entire diff when reporting results.")
@@ -93,3 +91,6 @@ if __name__ == '__main__':
                 print('\n'.join(difflib.ndiff(a[1].splitlines(), b[1].splitlines())))
 
     exit(return_code)
+
+if __name__ == '__main__':
+  main()

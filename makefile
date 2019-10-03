@@ -1,6 +1,6 @@
 all: dotest
 
-script=pyastsim/pyastsim
+script=python3 pyastsim/pyastsim.py
 
 dotest:
 	$(script) test/copied/*.py || echo "Test 1 Passed"
