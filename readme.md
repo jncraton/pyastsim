@@ -2,8 +2,18 @@ pyastsim
 ========
 
 [![Build Status](https://travis-ci.org/jncraton/pyastsim.svg?branch=master)](https://travis-ci.org/jncraton/pyastsim)
+[![PyPI version](https://badge.fury.io/py/pyastsim.svg)](https://badge.fury.io/py/pyastsim)
 
 Calculates the similarity between a batch of Python files.
+
+Installation
+------------
+
+The program can be installed using pip:
+
+```
+pip3 install pyastsim
+```
 
 Usage
 -----
