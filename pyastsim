@@ -40,6 +40,9 @@ class NormFunctions(NodeTransformer):
             name = f'function{len(self.identifiers):x}'
             self.identifiers[node.name] = name
 
+        for i, arg in enumerate(node.args.args):
+          arg.arg = f'arg{i}'
+
         new_func = FunctionDef(name=name, args=node.args, body=node.body, decorator_list=node.decorator_list)
 
         if isinstance(new_func.body[0], Expr) and isinstance(new_func.body[0].value, Str):
