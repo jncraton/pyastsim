@@ -37,7 +37,7 @@ class NormFunctions(NodeTransformer):
         try:
             name = self.identifiers[node.name]
         except KeyError:
-            name = f'function{len(self.identifiers)}'
+            name = f'function{len(self.identifiers):x}'
             self.identifiers[node.name] = name
 
         new_func = FunctionDef(name=name, args=node.args, body=node.body, decorator_list=node.decorator_list)
