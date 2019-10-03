@@ -19,7 +19,7 @@ class NormIdentifiers(NodeTransformer):
         try:
             id = self.identifiers[node.id]
         except KeyError:
-            id = f'identifier{len(self.identifiers)}'
+            id = f'id_{len(self.identifiers)}'
             self.identifiers[node.id] = id
         
         return  copy_location(Name(id=id), node)
@@ -51,8 +51,8 @@ def get_normed_content(filename, func=None):
     with open(filename) as src:
         tree = parse(src.read())
     
-        tree = NormIdentifiers().visit(tree)
         tree = NormFunctions(func=func).visit(tree)
+        tree = NormIdentifiers().visit(tree)
     
         return (filename, astunparse.unparse(tree))
 
