@@ -81,9 +81,15 @@ if __name__ == '__main__':
 
     pairs.sort(key=lambda a: -a[0])
 
+    return_code = 0
+
     for sim, dld, a, b in pairs:
         if sim > args.threshold:
             print(f"Detected pair similarity of {int(sim)}% with edit distance of {dld} for {a[0]} and {b[0]}\n")
 
+            return_code = 1
+
             if args.show_diff:
                 print('\n'.join(difflib.ndiff(a[1].splitlines(), b[1].splitlines())))
+
+    exit(return_code)
