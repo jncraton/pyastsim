@@ -70,11 +70,11 @@ def get_pair_stats(pair):
     return((percent, dld, pair[0], pair[1]))
 
 def main():
-    ap = argparse.ArgumentParser(description='Check Python source files for similarity')
+    ap = argparse.ArgumentParser(description='Check source files for similarity')
     ap.add_argument('--threshold', default=80, type=int, help="Similarity threshold. Values below this are not reported.")
     ap.add_argument('--show-diff', dest='show_diff', action='store_true', help="Show entire diff when reporting results.")
     ap.set_defaults(show_diff=False)
-    ap.add_argument('--function', help="Specific function to compare")
+    ap.add_argument('--function', help="Specific function to compare (Python source only)")
     ap.add_argument('files', nargs='+', help="List of files to compare")
 
     args = ap.parse_args()
