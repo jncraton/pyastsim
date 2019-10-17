@@ -2,6 +2,7 @@ import itertools
 import sys
 import re
 import argparse
+import subprocess
 import difflib
 
 from ast import parse, NodeTransformer, copy_location, Name, FunctionDef, Expr, Str
@@ -49,13 +50,18 @@ class NormFunctions(NodeTransformer):
         return  copy_location(new_func, node)
 
 def get_normed_content(filename, func=None):
-    with open(filename) as src:
-        tree = parse(src.read())
-    
-        tree = NormFunctions(func=func).visit(tree)
-        tree = NormIdentifiers().visit(tree)
-    
-        return (filename, astunparse.unparse(tree))
+    if filename.endswith('.py'):
+        with open(filename) as src:
+            tree = parse(src.read())
+        
+            tree = NormFunctions(func=func).visit(tree)
+            tree = NormIdentifiers().visit(tree)
+        
+            return (filename, astunparse.unparse(tree))
+
+    if filename.endswith('.c') or filename.endswith('.cpp'):
+        asm = subprocess.check_output(['gcc', '-S', '-o-', filename])
+        return (filename, asm.decode('utf8'))
 
 def get_pair_stats(pair):
     dld = editdistance.eval(pair[0][1], pair[1][1])
