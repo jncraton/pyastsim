@@ -4,7 +4,7 @@ pyastsim
 [![Build Status](https://travis-ci.org/jncraton/pyastsim.svg?branch=master)](https://travis-ci.org/jncraton/pyastsim)
 [![PyPI version](https://badge.fury.io/py/pyastsim.svg)](https://badge.fury.io/py/pyastsim)
 
-Calculates the similarity between a batch of Python files.
+Calculates the similarity between a batch of source files.
 
 Installation
 ------------
@@ -23,7 +23,7 @@ usage: pyastsim [-h] [--threshold THRESHOLD] [--show-diff]
                 [--function FUNCTION]
                 files [files ...]
 
-Check Python source files for similarity
+Check source files for similarity
 
 positional arguments:
   files                 List of files to compare
@@ -34,7 +34,7 @@ optional arguments:
                         Similarity threshold. Values below this are not
                         reported.
   --show-diff           Show entire diff when reporting results.
-  --function FUNCTION   Specific function to compare
+  --function FUNCTION   Specific function to compare (Python source only)
 ```
 
 Examples
@@ -63,6 +63,12 @@ Remove all but one function from the AST before performing comparison:
 ```
 pyastsim --function my_func *.py
 ```
+
+Language Support
+----------------
+
+- Python (using internal AST for comparison)
+- C/C++ (using GCC assembly output for comparison)
 
 Difference Calculation
 ----------------------
