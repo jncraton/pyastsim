@@ -52,7 +52,12 @@ class NormFunctions(NodeTransformer):
 def get_normed_content(filename, func=None):
     if filename.endswith('.py'):
         with open(filename) as src:
-            tree = parse(src.read())
+            content = src.read()
+            try:
+                tree = parse(content)
+            except SyntaxError:
+                print(f"Syntax error in {filename}. Comparing non-normalized source.")
+                return (filename, content)
         
             tree = NormFunctions(func=func).visit(tree)
             tree = NormIdentifiers().visit(tree)
